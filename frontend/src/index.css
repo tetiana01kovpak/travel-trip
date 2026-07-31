@@ -1,0 +1,134 @@
+@import "tailwindcss";
+
+@import "@fontsource/inter/400.css";
+@import "@fontsource/inter/500.css";
+@import "@fontsource/inter/600.css";
+@import "@fontsource/inter/700.css";
+@import "@fontsource/sora/500.css";
+@import "@fontsource/sora/600.css";
+@import "@fontsource/sora/700.css";
+@import "@fontsource/sora/800.css";
+
+@theme {
+  /* Typography */
+  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-display: "Sora", ui-sans-serif, system-ui, -apple-system, sans-serif;
+
+  /* Brand: Lagoon (teal/cyan) */
+  --color-lagoon-50: #eefcfb;
+  --color-lagoon-100: #d4f5f3;
+  --color-lagoon-200: #ade8e8;
+  --color-lagoon-300: #7ad3d8;
+  --color-lagoon-400: #45b4c2;
+  --color-lagoon-500: #2296ac;
+  --color-lagoon-600: #0e7490;
+  --color-lagoon-700: #0c5c74;
+  --color-lagoon-800: #104a5e;
+  --color-lagoon-900: #123e4f;
+  --color-lagoon-950: #082a37;
+
+  /* Accent: Coral/Sunset */
+  --color-coral-50: #fff1f2;
+  --color-coral-100: #ffe1e3;
+  --color-coral-200: #ffc4c9;
+  --color-coral-300: #ff9aa4;
+  --color-coral-400: #fb7185;
+  --color-coral-500: #f2455f;
+  --color-coral-600: #dd2a4d;
+  --color-coral-700: #b91c3f;
+  --color-coral-800: #931937;
+  --color-coral-900: #7a1832;
+
+  /* Soft, tinted shadows instead of flat gray */
+  --shadow-soft: 0 2px 10px -2px rgba(14, 116, 144, 0.14), 0 6px 20px -6px rgba(14, 116, 144, 0.1);
+  --shadow-lift: 0 16px 32px -12px rgba(14, 116, 144, 0.32), 0 6px 12px -4px rgba(251, 113, 133, 0.18);
+  --shadow-glow: 0 0 0 1px rgba(255, 255, 255, 0.12), 0 12px 40px -8px rgba(8, 42, 55, 0.55);
+
+  --animate-fade-up: fade-up 0.6s ease-out both;
+  --animate-shimmer: shimmer 1.8s ease-in-out infinite;
+
+  @keyframes fade-up {
+    from {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes shimmer {
+    0% {
+      background-position: -400px 0;
+    }
+    100% {
+      background-position: 400px 0;
+    }
+  }
+}
+
+@layer base {
+  * {
+    @apply border-slate-200;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-white text-slate-700 font-sans antialiased;
+    font-feature-settings: "cv11", "ss01";
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-display font-semibold text-slate-900;
+  }
+
+  #root {
+    @apply min-h-svh flex flex-col;
+  }
+
+  ::selection {
+    @apply bg-lagoon-200 text-lagoon-900;
+  }
+
+  :focus-visible {
+    @apply outline-none ring-2 ring-lagoon-500 ring-offset-2 ring-offset-white rounded-sm;
+  }
+}
+
+@layer utilities {
+  .leaflet-container {
+    font-family: var(--font-sans);
+    z-index: 0;
+  }
+
+  .skeleton {
+    @apply relative overflow-hidden bg-slate-200/70;
+    background-image: linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0) 0,
+      rgba(255, 255, 255, 0.6) 50%,
+      rgba(255, 255, 255, 0) 100%
+    );
+    background-size: 400px 100%;
+    background-repeat: no-repeat;
+    animation: var(--animate-shimmer);
+  }
+}
+
+@media print {
+  body {
+    background: #fff !important;
+  }
+}
