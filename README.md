@@ -99,6 +99,45 @@ Visit `http://localhost:5173/admin/login` and sign in with the `ADMIN_USERNAME` 
 password you chose above. From there: `/admin/dashboard` (bookings) and
 `/admin/countries` / `/admin/towns` / `/admin/activities` / `/admin/blog` (content CRUD).
 
+## Deploy on Render
+
+The root [`render.yaml`](render.yaml) blueprint creates a Node web service for the
+API and a static site for the frontend. It uses Node.js 22, generates the admin JWT
+secret, checks `/api/health`, and rewrites frontend routes to `index.html` so direct
+links and page refreshes work.
+
+1. Push this repository to your Git provider. In Render, choose **New > Blueprint**,
+   connect the repository, and use `render.yaml`.
+2. Supply the prompted MongoDB, Pixabay, Cloudinary, and admin credentials. Use a
+   bcrypt hash for `ADMIN_PASSWORD_HASH` (see the command above), without surrounding
+   quotes. MongoDB is external to this blueprint; for Atlas, allow the API service's
+   outbound IP ranges in the cluster's network access settings.
+3. Set the URL variables to the services' public HTTPS origins, without trailing
+   slashes. `CORS_ORIGIN` on the API must be the frontend origin;
+   `VITE_API_BASE_URL` on the frontend must be the API origin, without `/api`.
+   If the URLs aren't known during creation, use temporary HTTPS origins, then
+   replace them with the actual URLs shown in the Render dashboard. Service names
+   do not guarantee particular `onrender.com` hostnames.
+4. After updating the URLs, redeploy the API and rebuild/deploy the frontend.
+   Vite embeds its API URL at build time. Update both variables again if you switch
+   to custom domains. Render only prompts for `sync: false` values on initial
+   creation; subsequent changes must be made in each service's Environment settings.
+5. Check `<api-origin>/api/health`, open the frontend, and test browsing, refreshing
+   a nested route, and admin login. The health endpoint checks the server, so also
+   open the countries page to verify database access.
+
+To load sample content, run `npm run seed` from `backend/` locally with
+`backend/.env.local` pointing to the deployed database and image services. Seeding
+replaces countries, towns, activities, and blog posts; run it only when you intend
+to reset that content. It is deliberately excluded from deployment commands.
+
+The API uses Render's free plan, which can spin down when idle. Admin authentication
+uses cross-site cookies between the two services; browsers that block third-party
+cookies may require frontend and API custom domains under the same parent domain.
+
+See the [Render Blueprint reference](https://render.com/docs/blueprint-spec) for
+the supported configuration fields.
+
 ## Scripts
 
 | Command | Where | What |
