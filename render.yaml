@@ -25,16 +25,18 @@ services:
       - key: CLOUDINARY_FOLDER
         value: travel-trip
       - key: ADMIN_USERNAME
-        sync: false
+        value: admin
       - key: ADMIN_PASSWORD_HASH
         sync: false
       - key: ADMIN_JWT_SECRET
         generateValue: true
       - key: ADMIN_SESSION_TTL_HOURS
         value: "12"
-      # Set to the frontend's public HTTPS origin (no trailing slash).
       - key: CORS_ORIGIN
-        sync: false
+        fromService:
+          name: travel-trip-frontend
+          type: web
+          envVarKey: RENDER_EXTERNAL_URL
 
   - type: web
     name: travel-trip-frontend
@@ -47,9 +49,11 @@ services:
         value: "22"
       - key: SKIP_INSTALL_DEPS
         value: "true"
-      # Set to the API's public HTTPS origin (no /api or trailing slash).
       - key: VITE_API_BASE_URL
-        sync: false
+        fromService:
+          name: travel-trip-api
+          type: web
+          envVarKey: RENDER_EXTERNAL_URL
     routes:
       - type: rewrite
         source: /*

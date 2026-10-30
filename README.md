@@ -108,21 +108,17 @@ links and page refreshes work.
 
 1. Push this repository to your Git provider. In Render, choose **New > Blueprint**,
    connect the repository, and use `render.yaml`.
-2. Supply the prompted MongoDB, Pixabay, Cloudinary, and admin credentials. Use a
+2. Supply the prompted MongoDB, Pixabay, Cloudinary, and admin password credentials. Use a
    bcrypt hash for `ADMIN_PASSWORD_HASH` (see the command above), without surrounding
    quotes. MongoDB is external to this blueprint; for Atlas, allow the API service's
    outbound IP ranges in the cluster's network access settings.
-3. Set the URL variables to the services' public HTTPS origins, without trailing
-   slashes. `CORS_ORIGIN` on the API must be the frontend origin;
-   `VITE_API_BASE_URL` on the frontend must be the API origin, without `/api`.
-   If the URLs aren't known during creation, use temporary HTTPS origins, then
-   replace them with the actual URLs shown in the Render dashboard. Service names
-   do not guarantee particular `onrender.com` hostnames.
-4. After updating the URLs, redeploy the API and rebuild/deploy the frontend.
-   Vite embeds its API URL at build time. Update both variables again if you switch
-   to custom domains. Render only prompts for `sync: false` values on initial
-   creation; subsequent changes must be made in each service's Environment settings.
-5. Check `<api-origin>/api/health`, open the frontend, and test browsing, refreshing
+3. The admin username is `admin`. Render automatically supplies the services'
+   `onrender.com` URLs for `CORS_ORIGIN` and `VITE_API_BASE_URL`. If you use custom
+   domains, override these variables in the dashboard with the corresponding HTTPS
+   origins and redeploy both services; Vite embeds the API URL at build time.
+   Render prompts for secrets only on initial Blueprint creation; change them later
+   in the service's Environment settings.
+4. Check `<api-origin>/api/health`, open the frontend, and test browsing, refreshing
    a nested route, and admin login. The health endpoint checks the server, so also
    open the countries page to verify database access.
 
